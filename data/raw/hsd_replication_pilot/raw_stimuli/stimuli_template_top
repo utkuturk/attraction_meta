@@ -1,0 +1,151 @@
+var shuffleSequence = seq("intro", 
+                          "intro_sep", 
+                          sepWith("within_intro_sep", "practice"), 
+                          "practice_sep", 
+                          sepWith("sep", 
+                            rshuffle(startsWith("condition"), 
+                                    startsWith("filler"),
+                            )), //
+                          "send_results",
+                         "debrief"); 
+var practiceItemTypes = ["practice"];
+
+// default settings
+var manualSendResults = true;
+
+
+var defaults = [
+    "Separator", {
+        // transfer: 1000,
+        transfer: "keypress",
+        hideProgressBar: true,
+        normalMessage: "", 
+        errorMessage: "Daha hızlı yanıtlayınız.",
+        transfer: 600
+    },
+    "DashedAcceptabilityJudgment", {
+        hideProgressBar: true,
+        timeout: 5000,
+        
+        as: [["p","İYİ (P'ye basınız)"], ["q","KÖTÜ (Q'ya basınız)"]],
+        q: "Bu cümle kulağınıza nasıl geliyor?",
+        
+        mode: "speeded acceptability",
+        display: "in place",
+        wordTime: 400,
+        wordPauseTime: 100,
+        instructions: " ",
+
+        showNumbers: true,
+        hasCorrect: false,
+        autoFirstChar: false,
+        showNumbers: false
+    },
+    "Question", {
+        hideProgressBar: true,
+        timeout: 10000,
+
+        as: [["p","İYİ (P'ye basınız)"], ["q","KÖTÜ (Q'ya basınız)"]],
+        instructions: "Bu cümle kulağınıza nasıl geliyor?",
+        hasCorrect: false,
+        randomOrder: false,
+        autoFirstChar: false,
+        showNumbers: false
+    },
+    "Message", {
+        hideProgressBar: false
+    },
+    "Form", {
+        hideProgressBar: true,
+        continueOnReturn: true,
+        saveReactionTime: true,
+        continueMessage: "Devam etmek için buraya tıklayınız.",
+        obligatoryCheckboxErrorGenerator: function (field) { return "Bu alanı doldurmanız gerekmektedir." },
+        obligatoryErrorGenerator: function (field) { return "Bu alanı doldurmanız gerekmektedir."; },
+        obligatoryRadioErrorGenerator: function (field) { return "Seçeneklerden birini seçiniz."; }
+        
+    }
+];
+
+function modifyRunningOrder(ro) {
+        for (var i = 0; i < ro.length; ++i) {
+            if ( (i != 0) && (i % 40 == 0)) {
+                // Passing 'true' as the third argument casues the results from this controller to be omitted from the results file. 
+                // (Though in fact, the Message controller does not add any results in any case.)
+                ro[i].push(new DynamicElement(
+                    "Message",
+                    { html: "<p>Kısa bir ara. Bir sonraki cümleye geçmek için boşluk tuşuna basınız.</p>", transfer: "keypress"}, //, transfer: 1000 
+                    true
+                ));
+            }
+        }
+        return ro;
+    }
+
+
+var items = [
+    ["send_results", "__SendResults__", { }],
+
+
+    ["sep", "Separator", {
+        hideProgressBar: false,
+        transfer: "keypress",
+        normalMessage: "Bir sonraki cümleye geçmek için boşluk tuşuna basınız.",
+        errorMessage:  "Bir sonraki cümleye geçmek için boşluk tuşuna basınız."}],
+
+    ["intro_sep", "Separator", {
+        hideProgressBar: false,
+        transfer: "keypress",
+        normalMessage: "Alıştırma kısmına başlamak için boşluk tuşuna basınız. (Unutmayın: Cümleye ve anlamına dair sezgilerinizle ilgileniyoruz, dolayısıyla hızlıca yanıt veriniz.)",
+        errorMessage: "Alıştırma kısmına başlamak için boşluk tuşuna basınız. (Unutmayın: Cümleye ve anlamına dair sezgilerinizle ilgileniyoruz, dolayısıyla hızlıca yanıt veriniz.)" }],
+
+    ["within_intro_sep", "Separator", {
+        hideProgressBar: false,
+        transfer: "keypress",
+        normalMessage: "Bir sonraki cümleye geçmek için boşluk tuşuna basınız.",
+        errorMessage: "Lütfen soruları okurken biraz daha dikkatli olalım."}],
+
+    ["practice_sep", "Separator", {
+        hideProgressBar: false,
+        transfer: "keypress",
+        normalMessage: "Deneye başlamak için boşluk tuşuna basınız.",
+        errorMessage: "Lütfen soruları okurken biraz daha dikkatli olalım." }],
+
+    ["intro", "Form", {
+        html: { include: "intro1.html" },
+        obligatoryCheckboxErrorGenerator: function (field) { return "Devam etmeden önce çalışmaya katılmayı kabul etmelisiniz."; }
+    } ],
+    
+    ["intro", "Form", {
+        html: { include: "intro2.html" },
+        validators: {
+            age: function (s) { if (s.match(/^\d+$/)) return true; else return "Yaşınızı sayı olarak giriniz."; },
+        }
+    } ],
+
+    ["intro", "Form", {
+        html: { include: "intro3.html" } } ],
+
+    ["intro", "Form", {
+        html: { include: "intro4.html" } } ],
+
+    ["debrief", "Message", {
+        html: { include: "debrief.html" },
+                transfer: 3000  }],
+["practice", "DashedAcceptabilityJudgment", {s: "Bu kısım deneye ve sunum yöntemine alışmanız için bulunmaktadır." , hasCorrect: 0 } ],
+["practice", "DashedAcceptabilityJudgment", {s: "Bu cümle öncekinden daha uzun bir cümle. Okuması biraz daha zor olsa da sunum şekli aslında aynı. Şimdi deneydekilere benzer cümleler görelim." , hasCorrect: 0 } ],
+["practice", "DashedAcceptabilityJudgment", {s: "Öğrencinin asistanı gelince ders çok güzel anlattı." , hasCorrect: 1 } ],
+["practice", "DashedAcceptabilityJudgment", {s: "Utku'nun kızı yürüyene kadar bir sürü oyuncak alınmıştı." , hasCorrect: 0 } ],
+["practice", "DashedAcceptabilityJudgment", {s: "Kimsenin çocuğu ağlamayınca yeni yazılan kitap kimseye okumadı." , hasCorrect: 1 } ],
+["practice", "DashedAcceptabilityJudgment", { s: "Tuğrul hiç kimseye bir şey demeden bir buçuk saattir okulun bahçesine bekliyor." , hasCorrect: 1 } ],
+["practice", "DashedAcceptabilityJudgment", { s: "Jülide hiçbir evin bahçesine yeşil sivri biber fidelerini dün sabah dikmemiş." , hasCorrect: 0 } ],
+["practice", "DashedAcceptabilityJudgment", { s: "Simitçi ve midyeci zabıtanın geldiğini görünce koşarak uzaklaştı." , hasCorrect: 0 } ],
+["practice", "DashedAcceptabilityJudgment", { s: "Futbolcu hakemin seyircilerin taşkınlık yapmasını gerekçe gösterince sinirlendiler." , hasCorrect: 1 } ],
+    
+["practice", Message, {consentRequired: false, transfer: "keypress",
+                     html: ["div",
+                           ["p", "Elinizin ısındığını umuyorum. Hazır olduğunuzu hissettiğinizde 'boşluk' tuşuna basarak ilerleyiniz."],
+                           ["p", "NOT: Vereceğiniz cevaplar üzerine çok düşünmeyin! Tamamlayacağınız deneyde 'doğru' ya da 'yanlış' cevap bulunmamaktadır. Deney boyunca deneye odaklanmanız gerekmektedir."]
+                           ["p", "Katılımınız için çok teşekkürler!"],
+                           ]}],
+    
