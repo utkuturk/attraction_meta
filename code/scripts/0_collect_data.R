@@ -90,7 +90,7 @@ tl3.conditions <- data.frame(
 data$tl3 %<>% left_join(tl3.conditions, by = "exp_condition")
 
 
-# Hammerly, Staub, Dillon 2019 Data
+# Hammerly, Staub, Dillon 2019 Data ----------
 hsd1 = read.csv('data/raw/HammerlyEtAl2019/experiment1-all.csv') %>% 
   mutate(subj = sprintf("S[%d]", subj + 400), exp = "1")
 hsd3 = read.csv('data/raw/HammerlyEtAl2019/experiment3-all.csv') %>%
@@ -127,12 +127,12 @@ data$hsd %<>% select (
   )
 )
 
-# Lago
+# Lago --------
 data$lago = read_lago("data/raw/lagoetal/Lago_data.csv", subj_offset = 600)
 
 
-# Add more
+# Add more ---------
 
 
-# output
+# output -----------
 saveRDS(data, file = "data/data.rds")
