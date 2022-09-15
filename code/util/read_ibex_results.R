@@ -1,4 +1,5 @@
-read_ibexfarm_results <- function(fname, subj_offset = 0)
+
+read_ibex_results <- function(fname, subj_offset = 0, item_offset = 0)
 {
   data <- read.csv(fname, 
                    header = F, 
@@ -10,7 +11,10 @@ read_ibexfarm_results <- function(fname, subj_offset = 0)
   colnames(data) = c("Time", "MD5", "ControllerType", "SentenceNoInStimFile", "Element", "exp_condition", "item", "Sentence", "Question","Answer", "RT")
   
   subject_id <- with(data, { as.integer(as.factor(paste(Time, MD5))) })
+  data$item[data$exp_condition == "intro" | data$exp_condition == "practice"] <- 0
+  data$item_num <- as.integer(data$item)
   data$subject <- sprintf("S[%d]", subject_id + subj_offset)
+  data$item <- sprintf("I[%d]", data$item_num + item_offset)
   
   df_forms <- data %>% subset(ControllerType != "DashedAcceptabilityJudgment" ) %>% gdata::drop.levels()
   data %<>% subset(ControllerType == "DashedAcceptabilityJudgment")
@@ -42,6 +46,5 @@ read_ibexfarm_results <- function(fname, subj_offset = 0)
                               ifelse(grepl("Q'ya",data$Response) , F, NA))
   print( with(data, table(Response, response_yes)) )
   data %<>% dplyr::select(-Response)
-  
   data
 }
