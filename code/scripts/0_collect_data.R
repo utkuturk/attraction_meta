@@ -70,8 +70,8 @@ data$tl2 %<>% left_join(tl2.conditions, by = "exp_condition")
 
 
 # Turk Logacev Experiment 3 Data -------
-tl_bias_gram <- read_ibex_results("data/raw/hsd_replication_gram/results/results", subj_offset = 200, item_offset = 200) %>% mutate(V12 = "Gram")
-tl_bias_ungram <- read_ibex_results("data/raw/hsd_replication_gram/results/results", subj_offset = 300, item_offset = 300) %>% mutate(V12 = "Gram")
+tl_bias_gram <- read_ibex_results("data/raw/hsd_replication_gram/results/results", subj_offset = 200, item_offset = 200) %>% mutate(manipulation = "Gram")
+tl_bias_ungram <- read_ibex_results("data/raw/hsd_replication_gram/results/results", subj_offset = 300, item_offset = 300) %>% mutate(manipulation = "Ungram")
 data$tl3 <- bind_rows(tl_bias_gram, tl_bias_ungram)
 
 
@@ -97,33 +97,58 @@ hsd3 = read.csv('data/raw/HammerlyEtAl2019/experiment3-all.csv') %>%
   mutate(subj = sprintf("S[%d]", subj + 500), exp = "3")
 data$hsd = bind_rows(hsd1, hsd3) %>% filter(response != "NULL")
 
-data$hsd %<>% select (
+data$hsd %<>% select(
   subject=subj,
-  exp_condition=stimulustype,
-  item, condition, sentence, response, 
+  experiment=stimulustype,
+  item, 
+  exp_condition=condition, sentence, response, 
   RT=rt, 
   trial_no=order, 
   CorrectResponse, 
   grammatical=Grammaticality, 
   attractor_num=Attractor, 
-  Accuracy, exp
+  Accuracy, 
+  manipulation=exp
 ) %>% mutate(
+  RT = RT*1000,
   verb_num = case_when(
-    grammatical == "ungrammatical" ~ "pl",
-    grammatical == "gramatical" ~ "sg"
+    experiment == "Exp" & grammatical == "Ungrammatical" ~ "pl",
+    experiment == "Exp" & grammatical != "Ungrammatical" ~ "sg",
+    TRUE ~ "NA"
+  ),
+  manipulation = case_when(
+    manipulation == 1 ~ "No",
+    manipulation == 3 ~ "Ungram"
   ),
   experiment = case_when(
-    experiment == "online" ~ "AgrAttr"
+    experiment == "Exp" ~ "AgrAttr",
+    experiment != "Exp" ~ "filler"
+  ),
+  condition = case_when(
+    exp_condition == 4 ~ "a", 
+    exp_condition == 2 ~ "b",
+    exp_condition == 3 ~ "c",
+    exp_condition == 1 ~ "d",
+    exp_condition == 0 & grammatical == "Grammatical" ~ "filler_g",
+    exp_condition == 0 & grammatical != "Grammatical" ~ "filler_ung"
   ),
   exp_condition = case_when(
-    condition == "a" ~ "condition_a",
-    condition == "b" ~ "condition_b",
-    condition == "c" ~ "condition_c",
-    condition == "d" ~ "condition_d"
+    exp_condition == 4 ~ "condition_a", 
+    exp_condition == 2 ~ "condition_b",
+    exp_condition == 3 ~ "condition_c",
+    exp_condition == 1 ~ "condition_d",
+    exp_condition == 0 & grammatical == "Grammatical" ~ "filler_g",
+    exp_condition == 0 & grammatical != "Grammatical" ~ "filler_ung"
   ),
   match = case_when(
-    attractor_num == "plural" ~ "mismatch",
-    attractor_num == "singular" ~ "match",
+    attractor_num == "Plural" ~ "mismatch",
+    attractor_num == "Singular" ~ "match",
+    TRUE ~ "NA"
+  ),
+  response_yes = case_when(
+    response == "f" ~ TRUE,
+    response != "f" ~ FALSE,
+    TRUE ~ NA
   )
 )
 
