@@ -7,3 +7,4 @@ data = readRDS(fname_data)
 
 # make it lapply
 data %<>% lapply(., clean_data)
+
