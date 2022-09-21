@@ -1,0 +1,51 @@
+[1] "X[[i]]"
+             response_yes
+exp_condition FALSE TRUE
+  condition_a   831  231
+  condition_b    86  961
+  condition_c   947  119
+  condition_d    70  980
+  filler_g     1341  721
+  filler_ung   1935  174
+  practice      409  505
+[1] "number of bad subjects: 10.000000"
+[1] "X[[i]]"
+             response_yes
+exp_condition FALSE TRUE
+  condition_a   740   37
+  condition_b    42  726
+  condition_c   730   43
+  condition_d    63  699
+  filler_g       92 1368
+  filler_ung   1392  123
+  practice      303  366
+[1] "number of bad subjects: 2.000000"
+[1] "X[[i]]"
+             response_yes
+exp_condition FALSE TRUE
+  condition_a   946  122
+  condition_b   116  938
+  condition_c   998   74
+  condition_d    76  962
+  filler_g      350 2768
+  filler_ung    984   78
+  practice      432  490
+[1] "number of bad subjects: 2.000000"
+[1] "X[[i]]"
+             response_yes
+exp_condition FALSE TRUE
+  condition_a   770  375
+  condition_b   201  950
+  condition_c   982  167
+  condition_d   123 1025
+  filler_g      306 1984
+  filler_ung   3181  658
+[1] "number of bad subjects: 3.000000"
+[1] "X[[i]]"
+             response_yes
+exp_condition FALSE TRUE
+  condition_a   316  102
+  condition_b    37  384
+  condition_c   364   55
+  condition_d    21  401
+[1] "number of bad subjects: 1.000000"

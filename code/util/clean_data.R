@@ -24,6 +24,7 @@ clean_data <- function(data, accuracy_threshold = 0.25, rt_below = 200, rt_upper
     data_clean %<>% subset(natturk == "nat_turk")
   }
   
+  print(deparse(substitute(data)))
   print( with(data_clean, table(exp_condition, response_yes)) )
   print( sprintf("number of bad subjects: %f", length(bad_subjects)))
   data_clean
