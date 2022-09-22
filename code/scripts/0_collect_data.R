@@ -36,7 +36,7 @@ tl1.conditions <- data.frame(
 
 
 data$tl1 %<>% left_join(tl1.conditions, by = "exp_condition")
-
+data$tl1 %<>% mutate(ResponseCorrect = (response_yes == (grammatical == "gram")))
 
 
 # Turk Logacev Experiment 2 Data ---------
@@ -66,7 +66,7 @@ tl2.conditions <- data.frame(
 )
 
 data$tl2 %<>% left_join(tl2.conditions, by = "exp_condition")
-
+data$tl2 %<>% mutate(ResponseCorrect = (response_yes == (grammatical == "gram")))
 
 
 # Turk Logacev Experiment 3 Data -------
@@ -88,7 +88,7 @@ tl3.conditions <- data.frame(
 )
 
 data$tl3 %<>% left_join(tl3.conditions, by = "exp_condition")
-
+data$tl3 %<>% mutate(ResponseCorrect = (response_yes == (grammatical == "gram")))
 
 # Hammerly, Staub, Dillon 2019 Data ----------
 hsd1 = read.csv('data/raw/HammerlyEtAl2019/experiment1-all.csv') %>% 
@@ -107,7 +107,7 @@ data$hsd %<>% select(
   CorrectResponse, 
   grammatical=Grammaticality, 
   attractor_num=Attractor, 
-  Accuracy, 
+  ResponseCorrect=Accuracy, 
   manipulation=exp
 ) %>% mutate(
   RT = RT*1000,
@@ -149,12 +149,17 @@ data$hsd %<>% select(
     response == "f" ~ TRUE,
     response != "f" ~ FALSE,
     TRUE ~ NA
+  ),
+  ResponseCorrect = case_when(
+    ResponseCorrect == 1 ~ TRUE,
+    TRUE ~ FALSE
   )
 )
 
+
 # Lago --------
 data$lago = read_lago("data/raw/lagoetal/Lago_data.csv", subj_offset = 600)
-
+data$lago %<>% mutate(ResponseCorrect = (response_yes == (grammatical == "gram")))
 
 # Add more ---------
 

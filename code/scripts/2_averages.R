@@ -6,8 +6,7 @@ library(dplyr)
 invisible(lapply(list.files("code/util/", full.names = T), source))
 data = readRDS(fname_data)
 
-
 # Get Averages
-
+avgs = lapply(data, get_averages)
 
 # Plot
