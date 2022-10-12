@@ -1,4 +1,4 @@
-exclude_bad_subjects <- function(data_to_clean, accuracy_threshold = 0.25, rt_below = 200, rt_upper = 4999) {
+exclude_bad_subjects <- function(data_to_clean, accuracy_threshold = 0, rt_below = 200, rt_upper = 4999) {
   avg_by_subj <- data_to_clean %>%
     group_by(subject, experiment, condition, 
              grammatical, verb_num, attractor_num) %>%

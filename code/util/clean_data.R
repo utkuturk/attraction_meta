@@ -20,6 +20,7 @@ clean_data <- function(data, accuracy_threshold = 0.25, rt_below = 200, rt_upper
   data_clean <- data_to_clean %>% subset(!subject %in% bad_subjects)
   
   data_clean %<>% filter(RT < rt_upper & rt_below< RT)
+  data_clean %<>% subset(exp_condition != "practice") %>% subset(!is.na(response_yes))
   if("natturk" %in% colnames(data_clean)){
     data_clean %<>% subset(natturk == "nat_turk")
   }
