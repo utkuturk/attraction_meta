@@ -4,7 +4,7 @@ Currently, the analysis includes following experiments:
 
 - Hammerly et al. 2019
 - Lago et al. 2019
-- Turk & Logacev (Exps 1, 2a, 2b, 3) 
+- Turk & Logacev (Exps 1, 2a, 2b, 3) [(can be found here)](https://github.com/utkuturk/ma-thesis)
 
 Following packages and softawres are needed:
 
